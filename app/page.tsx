@@ -28,7 +28,7 @@ export default function Home() {
         <span className="brand-name">MORBIUS<span className="brand-period">.</span></span>
       </a>
       <nav className="main-nav" aria-label="Main navigation">
-        <a href="#collection">Collection</a>
+        <a href="/library">Collection</a>
         <a href="#studio">Studio</a>
         <a href="#community">Community</a>
         <a href="#plans">Plans</a>
@@ -38,7 +38,7 @@ export default function Home() {
           <span className="wallpaper-dot"></span><span className="wallpaper-label">Blood moon</span><span className="chevron" aria-hidden="true">⌄</span>
         </button>
         <a className="header-signin" href="#join">Sign in</a>
-        <a className="button button--small button--red" href="#collection">Enter the library <span aria-hidden="true">↗</span></a>
+        <a className="button button--small button--red" href="/library">Enter the library <span aria-hidden="true">↗</span></a>
       </div>
       <button className="menu-toggle" type="button" aria-label="Open navigation" aria-expanded="false"><span></span><span></span></button>
     </header>
@@ -56,7 +56,7 @@ export default function Home() {
           <h1 id="hero-title">Make it<br /><span className="title-outline">your</span> <span className="title-red">creature.</span></h1>
           <p className="hero-lede">A living library of interface components, full-page blocks, and tools to shape them your way.</p>
           <div className="hero-actions">
-            <a className="button button--red" href="#collection">Explore the collection <span aria-hidden="true">↗</span></a>
+            <a className="button button--red" href="/library">Explore the collection <span aria-hidden="true">↗</span></a>
             <a className="button button--ghost" href="#studio"><span className="play-icon" aria-hidden="true">▶</span> Enter the studio</a>
           </div>
           <div className="hero-proof"><span className="avatar-stack" aria-hidden="true"><i>M</i><i>V</i><i>+</i></span><span>Made for builders who make it their own.</span></div>
@@ -119,7 +119,7 @@ export default function Home() {
             <div className="card-info"><div><h3>Midnight overview</h3><p>Dashboard page · Next.js</p></div><button className="icon-button save-card" type="button" aria-label="Save Midnight overview" aria-pressed="false">♡</button></div>
           </article>
         </div>
-        <div className="collection-footer" data-reveal><span><span className="footer-dot"></span> 24 pieces in the collection. More rising.</span><a className="text-link" href="#studio">Browse the library <span aria-hidden="true">→</span></a></div>
+        <div className="collection-footer" data-reveal><span><span className="footer-dot"></span> 24 pieces in the collection. More rising.</span><a className="text-link" href="/library">Browse the library <span aria-hidden="true">→</span></a></div>
       </section>
 
       <section className="studio section-shell" id="studio" aria-labelledby="studio-title">
@@ -159,7 +159,7 @@ export default function Home() {
       <section className="final-cta section-shell" id="join" data-reveal><div className="final-eyes" aria-hidden="true"><span></span><span></span></div><div className="eyebrow"><span className="eyebrow-line"></span> THIS IS YOUR INVITATION</div><h2>Come out<br />after <span className="title-red">dark.</span></h2><a className="button button--red" href="mailto:hello@morbius.design?subject=Morbius%20early%20access">Get early access <span aria-hidden="true">↗</span></a><span className="final-note">NO SPAM. JUST THE GOOD STUFF FROM THE NIGHT SHIFT.</span></section>
     </main>
 
-    <footer className="site-footer"><a className="brand footer-brand" href="#top"><span className="brand-mark" aria-hidden="true"><svg viewBox="0 0 54 34"><path d="M27 13C22 3 12 1 3 2c4 4 5 9 4 14-4-4-7-5-7-5 5 7 8 12 8 19 5-5 10-7 16-4 1 3 2 5 3 6 1-1 2-3 3-6 6-3 11-1 16 4 0-7 3-12 8-19 0 0-3 1-7 5-1-5 0-10 4-14-9-1-19 1-24 11Z" /></svg></span><span className="brand-name">MORBIUS<span className="brand-period">.</span></span></a><span className="footer-copy">A component ecosystem for interfaces with a pulse.</span><div className="footer-links"><a href="#collection">Library</a><a href="#studio">Studio</a><a href="#plans">Plans</a><a href="mailto:hello@morbius.design">Contact</a></div><span className="footer-mark">© MORBIUS 2026 <i>·</i> BUILT AFTER DARK</span></footer>
+    <footer className="site-footer"><a className="brand footer-brand" href="#top"><span className="brand-mark" aria-hidden="true"><svg viewBox="0 0 54 34"><path d="M27 13C22 3 12 1 3 2c4 4 5 9 4 14-4-4-7-5-7-5 5 7 8 12 8 19 5-5 10-7 16-4 1 3 2 5 3 6 1-1 2-3 3-6 6-3 11-1 16 4 0-7 3-12 8-19 0 0-3 1-7 5-1-5 0-10 4-14-9-1-19 1-24 11Z" /></svg></span><span className="brand-name">MORBIUS<span className="brand-period">.</span></span></a><span className="footer-copy">A component ecosystem for interfaces with a pulse.</span><div className="footer-links"><a href="/library">Library</a><a href="#studio">Studio</a><a href="#plans">Plans</a><a href="mailto:hello@morbius.design">Contact</a></div><span className="footer-mark">© MORBIUS 2026 <i>·</i> BUILT AFTER DARK</span></footer>
     <div className="toast" role="status" aria-live="polite"></div>
       <Script src="/script.js" strategy="afterInteractive" />
     </>
