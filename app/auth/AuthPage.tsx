@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
 import { createClient } from "@/lib/supabase/client";
+import { signInSchema, signUpSchema } from "@/lib/validation/auth";
 
 type AuthPageProps = { mode: "signin" | "signup" };
 
@@ -37,18 +38,29 @@ export default function AuthPage({ mode }: AuthPageProps) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isGoogleSubmitting, setIsGoogleSubmitting] = useState(false);
   const [notice, setNotice] = useState<{ kind: "error" | "success"; text: string } | null>(null);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setNotice(null);
+
+    const validation = isSignUp
+      ? signUpSchema.safeParse({ displayName, email, password })
+      : signInSchema.safeParse({ email, password });
+
+    if (!validation.success) {
+      setNotice({ kind: "error", text: validation.error.issues[0]?.message ?? "Check the form and try again." });
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
       const supabase = createClient();
       if (isSignUp) {
         const { data, error } = await supabase.auth.signUp({
-          email,
+          email: email.trim(),
           password,
           options: {
             data: { display_name: displayName.trim() },
@@ -67,7 +79,7 @@ export default function AuthPage({ mode }: AuthPageProps) {
           text: "Your account is nearly ready. Check your inbox for the confirmation link to join the library.",
         });
       } else {
-        const { error } = await supabase.auth.signInWithPassword({ email, password });
+        const { error } = await supabase.auth.signInWithPassword({ email: email.trim(), password });
         if (error) throw error;
         router.replace("/library");
         router.refresh();
@@ -80,6 +92,26 @@ export default function AuthPage({ mode }: AuthPageProps) {
       });
     } finally {
       setIsSubmitting(false);
+    }
+  }
+
+  async function handleGoogleSignIn() {
+    setNotice(null);
+    setIsGoogleSubmitting(true);
+
+    try {
+      const supabase = createClient();
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: "google",
+        options: { redirectTo: `${window.location.origin}/auth/callback` },
+      });
+      if (error) throw error;
+    } catch (error) {
+      setNotice({
+        kind: "error",
+        text: error instanceof Error ? error.message : "Google sign-in could not start. Please try again.",
+      });
+      setIsGoogleSubmitting(false);
     }
   }
 
@@ -124,6 +156,18 @@ export default function AuthPage({ mode }: AuthPageProps) {
             <p>{isSignUp ? "A good place to start making things your own." : "Sign in to pick up where you left off."}</p>
           </div>
 
+          <button
+            className="auth-google-button"
+            disabled={isSubmitting || isGoogleSubmitting}
+            onClick={handleGoogleSignIn}
+            type="button"
+          >
+            <span className="auth-google-mark" aria-hidden="true">G</span>
+            <span>{isGoogleSubmitting ? "Connecting to Google…" : "Continue with Google"}</span>
+            <span className="auth-google-arrow" aria-hidden="true">↗</span>
+          </button>
+          <div className="auth-divider"><span>OR CONTINUE WITH EMAIL</span></div>
+
           <form className="auth-form" onSubmit={handleSubmit}>
             {isSignUp && (
               <label className="auth-field">
@@ -166,7 +210,7 @@ export default function AuthPage({ mode }: AuthPageProps) {
 
             {notice && <p className={`auth-notice auth-notice--${notice.kind}`} role={notice.kind === "error" ? "alert" : "status"}>{notice.text}</p>}
 
-            <button className="auth-submit" disabled={isSubmitting} type="submit">
+            <button className="auth-submit" disabled={isSubmitting || isGoogleSubmitting} type="submit">
               <span>{isSubmitting ? "One moment…" : isSignUp ? "Create your account" : "Sign in"}</span>
               <span aria-hidden="true">↗</span>
             </button>
