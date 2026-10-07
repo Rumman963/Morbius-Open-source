@@ -2,6 +2,7 @@ import Script from "next/script";
 import type { CSSProperties } from "react";
 import { LiquidGlass } from "@creativoma/liquid-glass";
 import ThemeControl from "./ThemeControl";
+import ScrollBats from "./ScrollBats";
 
 export default function Home() {
   return (
@@ -9,15 +10,7 @@ export default function Home() {
 <div className="site-atmosphere" aria-hidden="true">
       <div className="atmosphere-grain"></div>
       <div className="moon-halo"></div>
-      <div className="bat-flock bat-flock--one">
-        <svg viewBox="0 0 140 72"><path d="M70 32c-8-17-26-27-47-26 9 8 11 19 8 29C20 25 10 22 0 23c14 8 19 19 21 32 11-10 23-13 37-8 4 8 8 14 12 17 4-3 8-9 12-17 14-5 26-2 37 8 2-13 7-24 21-32-10-1-20 2-31 12-3-10-1-21 8-29-21-1-39 9-47 26Z" /></svg>
-      </div>
-      <div className="bat-flock bat-flock--two">
-        <svg viewBox="0 0 140 72"><path d="M70 32c-8-17-26-27-47-26 9 8 11 19 8 29C20 25 10 22 0 23c14 8 19 19 21 32 11-10 23-13 37-8 4 8 8 14 12 17 4-3 8-9 12-17 14-5 26-2 37 8 2-13 7-24 21-32-10-1-20 2-31 12-3-10-1-21 8-29-21-1-39 9-47 26Z" /></svg>
-      </div>
-      <div className="bat-flock bat-flock--three">
-        <svg viewBox="0 0 140 72"><path d="M70 32c-8-17-26-27-47-26 9 8 11 19 8 29C20 25 10 22 0 23c14 8 19 19 21 32 11-10 23-13 37-8 4 8 8 14 12 17 4-3 8-9 12-17 14-5 26-2 37 8 2-13 7-24 21-32-10-1-20 2-31 12-3-10-1-21 8-29-21-1-39 9-47 26Z" /></svg>
-      </div>
+      <ScrollBats />
       <span className="eye-pair eye-pair--a"></span>
       <span className="eye-pair eye-pair--b"></span>
     </div>
