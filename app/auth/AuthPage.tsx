@@ -163,7 +163,14 @@ export default function AuthPage({ mode }: AuthPageProps) {
             onClick={handleGoogleSignIn}
             type="button"
           >
-            <span className="auth-google-mark" aria-hidden="true">G</span>
+            <span className="auth-google-mark" aria-hidden="true">
+              <svg viewBox="0 0 32 32" focusable="false">
+                <path d="M30.42 16.83c0-1.03-.092-2.017-.264-2.966H16.5v5.61h7.804c-.336 1.81-1.358 3.347-2.894 4.375v3.637h4.686c2.742-2.524 4.324-6.242 4.324-10.657z" fill="#4285F4" />
+                <path d="M16.5 31c3.915 0 7.197-1.298 9.596-3.513L21.41 23.85c-1.298.87-2.96 1.383-4.91 1.383-3.777 0-6.973-2.55-8.113-5.978H3.542v3.757C5.928 27.752 10.832 31 16.5 31z" fill="#34A853" />
+                <path d="M8.387 19.255c-.29-.87-.455-1.8-.455-2.755 0-.956.165-1.885.455-2.755V9.988H3.542C2.56 11.946 2 14.16 2 16.5s.56 4.554 1.542 6.512z" fill="#FBBC05" />
+                <path d="M16.5 7.767c2.13 0 4.04.732 5.543 2.168l4.16-4.158C23.69 3.437 20.407 2 16.5 2 10.832 2 5.928 5.25 3.542 9.988l4.845 3.757c1.14-3.427 4.336-5.978 8.113-5.978z" fill="#EA4335" />
+              </svg>
+            </span>
             <span>{isGoogleSubmitting ? "Connecting to Google…" : "Continue with Google"}</span>
             <span className="auth-google-arrow" aria-hidden="true">↗</span>
           </button>
