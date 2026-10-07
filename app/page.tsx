@@ -1,5 +1,7 @@
 import Script from "next/script";
 import type { CSSProperties } from "react";
+import { LiquidGlass } from "@creativoma/liquid-glass";
+import ThemeControl from "./ThemeControl";
 
 export default function Home() {
   return (
@@ -34,11 +36,12 @@ export default function Home() {
         <a href="#plans">Plans</a>
       </nav>
       <div className="header-actions">
+        <ThemeControl />
         <button className="wallpaper-trigger" type="button" aria-label="Change background atmosphere" aria-haspopup="true" aria-expanded="false">
           <span className="wallpaper-dot"></span><span className="wallpaper-label">Blood moon</span><span className="chevron" aria-hidden="true">⌄</span>
         </button>
         <a className="header-signin" href="/signin">Sign in</a>
-        <a className="button button--small button--red" href="/library">Enter the library <span aria-hidden="true">↗</span></a>
+        <a className="button button--small button--red" href="/library">Browse <span aria-hidden="true">↗</span></a>
       </div>
       <button className="menu-toggle" type="button" aria-label="Open navigation" aria-expanded="false"><span></span><span></span></button>
     </header>
@@ -52,49 +55,43 @@ export default function Home() {
     <main id="top">
       <section className="hero section-shell" aria-labelledby="hero-title">
         <div className="hero-copy" data-reveal>
-          <div className="eyebrow"><span className="eyebrow-line"></span> THE COMPONENT ECOSYSTEM</div>
-          <h1 id="hero-title">Make it<br /><span className="title-outline">your</span> <span className="title-red">creature.</span></h1>
-          <p className="hero-lede">A living library of interface components, full-page blocks, and tools to shape them your way.</p>
+          <div className="eyebrow"><span className="eyebrow-line"></span> THE MORBIUS LIBRARY</div>
+          <h1 id="hero-title">Build UI.<br /><span className="title-red">Make it yours.</span></h1>
+          <p className="hero-lede">Components, blocks, and pages—ready to remix.</p>
           <div className="hero-actions">
-            <a className="button button--red" href="/library">Explore the collection <span aria-hidden="true">↗</span></a>
-            <a className="button button--ghost" href="#studio"><span className="play-icon" aria-hidden="true">▶</span> Enter the studio</a>
+            <a className="button button--red" href="/library">Explore library <span aria-hidden="true">↗</span></a>
+            <a className="button button--ghost" href="#studio">Open studio</a>
           </div>
-          <div className="hero-proof"><span className="avatar-stack" aria-hidden="true"><i>M</i><i>V</i><i>+</i></span><span>Made for builders who make it their own.</span></div>
         </div>
 
         <div className="hero-stage" data-reveal data-delay="140">
           <div className="stage-orbit stage-orbit--outer"></div>
           <div className="stage-orbit stage-orbit--inner"></div>
           <div className="stage-crosshair stage-crosshair--one"></div><div className="stage-crosshair stage-crosshair--two"></div>
-          <div className="stage-caption"><span className="live-indicator"></span> LIVE PREVIEW <span className="caption-slash">/</span> BUTTON SYSTEM</div>
-          <div className="preview-window" data-preview-theme="ember">
+          <div className="stage-caption"><span className="live-indicator"></span> LIVE PREVIEW</div>
+          <LiquidGlass as="div" className="preview-window" contentClassName="preview-window-content" backdropBlur={10} displacementScale={36} tintColor="var(--glass-tint)" data-preview-theme="ember">
             <div className="preview-window-bar"><div className="window-dots"><i></i><i></i><i></i></div><span>morbius / button-lab</span><button className="window-more" type="button" aria-label="More preview options">···</button></div>
             <div className="preview-content">
               <div className="preview-eyebrow">BUTTON / PRIMARY</div>
-              <h2>One component.<br /><span>Endless direction.</span></h2>
-              <p>Choose a style. Make it yours. Ship it.</p>
-              <button className="demo-button" type="button">Launch project <span aria-hidden="true">↗</span></button>
-              <div className="preview-meta"><span><i className="tiny-check">✓</i> keyboard ready</span><span>react · tailwind</span></div>
+              <h2>One design.<br /><span>Your direction.</span></h2>
+              <p>Pick. Tune. Ship.</p>
+              <button className="demo-button" type="button">Preview <span aria-hidden="true">↗</span></button>
+              <div className="preview-meta"><span><i className="tiny-check">✓</i> Accessible</span><span>React · Tailwind</span></div>
             </div>
             <div className="preview-theme-switch" role="group" aria-label="Change component preview style">
               <button className="theme-choice is-active" data-theme-choice="ember" aria-pressed="true"><i className="theme-dot dot-ember"></i>Ember</button>
               <button className="theme-choice" data-theme-choice="acid" aria-pressed="false"><i className="theme-dot dot-acid"></i>Acid</button>
               <button className="theme-choice" data-theme-choice="frost" aria-pressed="false"><i className="theme-dot dot-frost"></i>Frost</button>
             </div>
-          </div>
-          <div className="floating-chip chip-code"><span className="code-icon">&lt;/&gt;</span><span>Copy, install<br /><b>or remix</b></span></div>
-          <div className="floating-chip chip-motion"><span className="pulse-ring"></span><span>Motion<br /><b>tuned by you</b></span></div>
-          <span className="stage-index">01 <span>/</span> 03</span>
+          </LiquidGlass>
         </div>
-        <a className="scroll-cue" href="#collection"><span className="scroll-line"></span> SCROLL TO DISCOVER</a>
+        <a className="scroll-cue" href="#collection" aria-label="Scroll to library"><span className="scroll-line"></span></a>
       </section>
-
-      <section className="ticker" aria-label="Morbius capabilities"><div className="ticker-track"><span>BUILT TO BE REMIXED</span><i>✳</i><span>YOUR STACK, YOUR RULES</span><i>✳</i><span>COMPONENTS WITH CHARACTER</span><i>✳</i><span>BUILT TO BE REMIXED</span><i>✳</i><span>YOUR STACK, YOUR RULES</span><i>✳</i><span>COMPONENTS WITH CHARACTER</span><i>✳</i></div></section>
 
       <section className="collection section-shell" id="collection" aria-labelledby="collection-title">
         <div className="section-heading" data-reveal>
-          <div><div className="eyebrow"><span className="eyebrow-line"></span> THE COLLECTION</div><h2 id="collection-title">Find your <span className="title-red">form.</span></h2></div>
-          <p>Primitives, patterns, and whole page sections. Start with a spark, leave with something unmistakably yours.</p>
+          <div><div className="eyebrow"><span className="eyebrow-line"></span> THE COLLECTION</div><h2 id="collection-title">Find your <span className="title-red">pieces.</span></h2></div>
+          <p>Preview. Customize. Ship.</p>
         </div>
         <div className="collection-toolbar" data-reveal>
           <div className="category-tabs" role="tablist" aria-label="Filter component collection">
@@ -123,7 +120,7 @@ export default function Home() {
       </section>
 
       <section className="studio section-shell" id="studio" aria-labelledby="studio-title">
-        <div className="studio-copy" data-reveal><div className="eyebrow"><span className="eyebrow-line"></span> THE MORBIUS STUDIO</div><h2 id="studio-title">Make it<br /><span className="title-red">morph.</span></h2><p>Change the shape, tone, and feel before it ever touches your codebase. Your choices travel with the component.</p><ul className="studio-features"><li><span>01</span> Pick a visual style</li><li><span>02</span> Tune color, type & motion</li><li><span>03</span> Preview. Copy. Make it yours.</li></ul><a className="button button--ghost" href="#join">Build a custom component <span aria-hidden="true">↗</span></a></div>
+        <div className="studio-copy" data-reveal><div className="eyebrow"><span className="eyebrow-line"></span> THE STUDIO</div><h2 id="studio-title">Make it<br /><span className="title-red">morph.</span></h2><p>Shape it. See it. Copy the code.</p><ul className="studio-features"><li><span>01</span> Choose a style</li><li><span>02</span> Set color and motion</li><li><span>03</span> Copy your code</li></ul><a className="button button--ghost" href="#join">Create a component <span aria-hidden="true">↗</span></a></div>
         <div className="studio-panel" data-reveal data-delay="120">
           <div className="studio-panel-head"><div className="studio-breadcrumb"><span className="studio-symbol">◈</span> STUDIO <span>/</span> CUSTOMIZE</div><div className="studio-state"><span className="live-indicator"></span> UNSAVED PREVIEW</div></div>
           <div className="studio-workspace">
@@ -144,22 +141,22 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="manifesto" aria-label="Morbius philosophy"><div className="manifesto-bat" aria-hidden="true"><svg viewBox="0 0 180 92"><path d="M90 41C78 16 53 3 22 5c13 12 16 28 11 43C18 33 8 29 0 29c20 12 28 27 30 48 16-15 33-19 54-12 2 12 4 19 6 22 2-3 4-10 6-22 21-7 38-3 54 12 2-21 10-36 30-48-8 0-18 4-33 19-5-15-2-31 11-43-31-2-56 11-68 36Z" /></svg></div><div className="manifesto-inner" data-reveal><div className="eyebrow"><span className="eyebrow-line"></span> OUR KIND OF CREATION</div><p>“Good interfaces<br />have a <span>pulse.</span>”</p><span className="manifesto-note">MAKE SOMETHING THAT FEELS LIKE YOU.</span></div><div className="manifesto-side">M / 001<br /><span>EST. AFTER DARK</span></div></section>
+      <section className="manifesto" aria-label="Morbius philosophy"><div className="manifesto-bat" aria-hidden="true"><svg viewBox="0 0 180 92"><path d="M90 41C78 16 53 3 22 5c13 12 16 28 11 43C18 33 8 29 0 29c20 12 28 27 30 48 16-15 33-19 54-12 2 12 4 19 6 22 2-3 4-10 6-22 21-7 38-3 54 12 2-21 10-36 30-48-8 0-18 4-33 19-5-15-2-31 11-43-31-2-56 11-68 36Z" /></svg></div><div className="manifesto-inner" data-reveal><p>“Good interfaces<br />have a <span>pulse.</span>”</p></div><div className="manifesto-side">M / 001</div></section>
 
       <section className="community section-shell" id="community" aria-labelledby="community-title">
-        <div className="community-content" data-reveal><div className="eyebrow"><span className="eyebrow-line"></span> MADE BY THE MANY</div><h2 id="community-title">A little bit<br />of <span className="title-red">everyone.</span></h2><p>Discover work from independent makers, shape it for your project, or bring your own creature to the collection.</p><a className="text-link" href="#join">Meet the community <span aria-hidden="true">→</span></a></div>
-        <div className="community-wall" data-reveal data-delay="100"><div className="maker-note note-one"><span>✳</span><b>Made to remix</b><small>Every piece comes with its source.</small></div><div className="maker-note note-two"><span>↗</span><b>Your work belongs here</b><small>Publish a component. Find your people.</small></div><div className="community-orbit"><div className="community-orbit-ring"></div><div className="maker maker-main">M</div><div className="maker maker-a">V</div><div className="maker maker-b">A</div><div className="maker maker-c">K</div><div className="maker maker-d">+</div><span className="orbit-label">THE NIGHT SHIFT</span></div><span className="wall-coordinate">40° 43' 55.3" N<br />73° 59' 11.2" W</span></div>
+        <div className="community-content" data-reveal><div className="eyebrow"><span className="eyebrow-line"></span> COMMUNITY</div><h2 id="community-title">Made by<br /><span className="title-red">everyone.</span></h2><p>Share what you make. Find your next starting point.</p><a className="text-link" href="#join">Join the community <span aria-hidden="true">→</span></a></div>
+        <div className="community-wall" data-reveal data-delay="100"><div className="maker-note note-one"><span>✳</span><b>Made to remix</b><small>Source included.</small></div><div className="maker-note note-two"><span>↗</span><b>Share your work</b><small>Find your people.</small></div><div className="community-orbit"><div className="community-orbit-ring"></div><div className="maker maker-main">M</div><div className="maker maker-a">V</div><div className="maker maker-b">A</div><div className="maker maker-c">K</div><div className="maker maker-d">+</div><span className="orbit-label">THE NIGHT SHIFT</span></div></div>
       </section>
 
       <section className="plans section-shell" id="plans" aria-labelledby="plans-title">
-        <div className="plans-heading" data-reveal><div><div className="eyebrow"><span className="eyebrow-line"></span> YOUR NEXT CHAPTER</div><h2 id="plans-title">Start in the dark.<br /><span className="title-red">Go anywhere.</span></h2></div><p>Morbius will grow with you. The core library stays open; premium collections and creative tools make more room to play.</p></div>
-        <div className="plan-strip" data-reveal><div className="plan-intro"><span className="plan-status"><i></i> EARLY ACCESS</span><h3>Join the first wave.</h3><p>We’re building Morbius in the open. Get early access updates when the library and studio are ready.</p><a className="button button--red" href="#join">Get on the list <span aria-hidden="true">↗</span></a></div><div className="plan-includes"><span>WHAT'S COMING</span><ul><li><i>✓</i> A growing free component collection</li><li><i>✓</i> Choose your framework and visual style</li><li><i>✓</i> Customize and export your own components</li><li><i>✳</i> Premium collections for subscribers</li></ul></div><div className="plan-glow" aria-hidden="true"></div></div>
+        <div className="plans-heading" data-reveal><div><div className="eyebrow"><span className="eyebrow-line"></span> PLANS</div><h2 id="plans-title">Free to start.<br /><span className="title-red">Room to grow.</span></h2></div><p>Premium tools, when you need them.</p></div>
+        <div className="plan-strip" data-reveal><div className="plan-intro"><span className="plan-status"><i></i> FREE TO START</span><h3>Start creating.</h3><p>Browse and remix the library.</p><a className="button button--red" href="/signup">Create account <span aria-hidden="true">↗</span></a></div><div className="plan-includes"><span>INCLUDED</span><ul><li><i>✓</i> Core component library</li><li><i>✓</i> Style and framework filters</li><li><i>✓</i> Copy and customize</li><li><i>✳</i> Premium collections coming later</li></ul></div><div className="plan-glow" aria-hidden="true"></div></div>
       </section>
 
-      <section className="final-cta section-shell" id="join" data-reveal><div className="final-eyes" aria-hidden="true"><span></span><span></span></div><div className="eyebrow"><span className="eyebrow-line"></span> THIS IS YOUR INVITATION</div><h2>Come out<br />after <span className="title-red">dark.</span></h2><a className="button button--red" href="mailto:hello@morbius.design?subject=Morbius%20early%20access">Get early access <span aria-hidden="true">↗</span></a><span className="final-note">NO SPAM. JUST THE GOOD STUFF FROM THE NIGHT SHIFT.</span></section>
+      <section className="final-cta section-shell" id="join" data-reveal><div className="final-eyes" aria-hidden="true"><span></span><span></span></div><div className="eyebrow"><span className="eyebrow-line"></span> YOUR NEXT BUILD</div><h2>Make it<br /><span className="title-red">yours.</span></h2><a className="button button--red" href="/signup">Get started <span aria-hidden="true">↗</span></a></section>
     </main>
 
-    <footer className="site-footer"><a className="brand footer-brand" href="#top"><span className="brand-mark" aria-hidden="true"><svg viewBox="0 0 54 34"><path d="M27 13C22 3 12 1 3 2c4 4 5 9 4 14-4-4-7-5-7-5 5 7 8 12 8 19 5-5 10-7 16-4 1 3 2 5 3 6 1-1 2-3 3-6 6-3 11-1 16 4 0-7 3-12 8-19 0 0-3 1-7 5-1-5 0-10 4-14-9-1-19 1-24 11Z" /></svg></span><span className="brand-name">MORBIUS<span className="brand-period">.</span></span></a><span className="footer-copy">A component ecosystem for interfaces with a pulse.</span><div className="footer-links"><a href="/library">Library</a><a href="#studio">Studio</a><a href="#plans">Plans</a><a href="mailto:hello@morbius.design">Contact</a></div><span className="footer-mark">© MORBIUS 2026 <i>·</i> BUILT AFTER DARK</span></footer>
+    <footer className="site-footer"><a className="brand footer-brand" href="#top"><span className="brand-mark" aria-hidden="true"><svg viewBox="0 0 54 34"><path d="M27 13C22 3 12 1 3 2c4 4 5 9 4 14-4-4-7-5-7-5 5 7 8 12 8 19 5-5 10-7 16-4 1 3 2 5 3 6 1-1 2-3 3-6 6-3 11-1 16 4 0-7 3-12 8-19 0 0-3 1-7 5-1-5 0-10 4-14-9-1-19 1-24 11Z" /></svg></span><span className="brand-name">MORBIUS<span className="brand-period">.</span></span></a><div className="footer-links"><a href="/library">Library</a><a href="#studio">Studio</a><a href="#plans">Plans</a></div><span className="footer-mark">© MORBIUS 2026</span></footer>
     <div className="toast" role="status" aria-live="polite"></div>
       <Script src="/script.js" strategy="afterInteractive" />
     </>

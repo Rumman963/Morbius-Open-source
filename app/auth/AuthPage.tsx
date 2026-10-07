@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
+import { LiquidGlass } from "@creativoma/liquid-glass";
+import ThemeControl from "@/app/ThemeControl";
 import { createClient } from "@/lib/supabase/client";
 import { signInSchema, signUpSchema } from "@/lib/validation/auth";
 
@@ -76,7 +78,7 @@ export default function AuthPage({ mode }: AuthPageProps) {
         }
         setNotice({
           kind: "success",
-          text: "Your account is nearly ready. Check your inbox for the confirmation link to join the library.",
+          text: "Check your inbox for the confirmation link to join the Morbius.",
         });
       } else {
         const { error } = await supabase.auth.signInWithPassword({ email: email.trim(), password });
@@ -135,25 +137,24 @@ export default function AuthPage({ mode }: AuthPageProps) {
           <span className="auth-brand-mark"><MorbiusMark /></span>
           <span className="auth-brand-word">MORBIUS</span>
         </Link>
-        <Link className="auth-back-link" href="/library">Explore the library <span aria-hidden="true">↗</span></Link>
+        <div className="auth-topbar-actions">
+          <ThemeControl />
+          <Link className="auth-back-link" href="/library">Library <span aria-hidden="true">↗</span></Link>
+        </div>
       </header>
 
       <div className="auth-layout">
         <section className="auth-story" aria-label="About Morbius">
-          <div className="auth-kicker"><span /> YOUR NEXT BUILD STARTS HERE</div>
-          <h1>{isSignUp ? <>Make room<br />for your <em>ideas.</em></> : <>Good to have<br />you <em>back.</em></>}</h1>
-          <p>{isSignUp
-            ? "Save the pieces you love, shape your own components, and build a library that feels like yours."
-            : "Your saved components, custom collections, and next big idea are right where you left them."}</p>
-          <div className="auth-story-foot"><span className="auth-story-bat"><MorbiusMark /></span><span>BUILT FOR THE THINGS YOU HAVEN’T MADE YET.</span></div>
+          <div className="auth-kicker"><span /> MORBIUS</div>
+          <h1>{isSignUp ? <>Make it<br /><em>yours.</em></> : <>Welcome<br /><em>back.</em></>}</h1>
+          <p>{isSignUp ? "Save and customize your favorite pieces." : "Your library is waiting."}</p>
         </section>
 
-        <section className="auth-card" aria-labelledby="auth-heading">
+        <LiquidGlass as="section" className="auth-card" contentClassName="auth-card-content" backdropBlur={18} displacementScale={28} tintColor="var(--glass-tint)" aria-labelledby="auth-heading">
           <div className="auth-card-orb" aria-hidden="true" />
           <div className="auth-card-head">
-            <span className="auth-card-eyebrow">{isSignUp ? "CREATE YOUR ACCOUNT" : "WELCOME BACK"}</span>
-            <h2 id="auth-heading">{isSignUp ? "Join the night shift." : "Enter the after hours."}</h2>
-            <p>{isSignUp ? "A good place to start making things your own." : "Sign in to pick up where you left off."}</p>
+            <span className="auth-card-eyebrow">{isSignUp ? "CREATE ACCOUNT" : "SIGN IN"}</span>
+            <h2 id="auth-heading">{isSignUp ? "Get started." : "Welcome back."}</h2>
           </div>
 
           <button
@@ -166,7 +167,7 @@ export default function AuthPage({ mode }: AuthPageProps) {
             <span>{isGoogleSubmitting ? "Connecting to Google…" : "Continue with Google"}</span>
             <span className="auth-google-arrow" aria-hidden="true">↗</span>
           </button>
-          <div className="auth-divider"><span>OR CONTINUE WITH EMAIL</span></div>
+          <div className="auth-divider"><span>OR</span></div>
 
           <form className="auth-form" onSubmit={handleSubmit}>
             {isSignUp && (
@@ -176,7 +177,7 @@ export default function AuthPage({ mode }: AuthPageProps) {
                   autoComplete="name"
                   name="displayName"
                   onChange={(event) => setDisplayName(event.target.value)}
-                  placeholder="What should we call you?"
+                  placeholder="Your name"
                   required
                   value={displayName}
                 />
@@ -188,7 +189,7 @@ export default function AuthPage({ mode }: AuthPageProps) {
                 autoComplete="email"
                 name="email"
                 onChange={(event) => setEmail(event.target.value)}
-                placeholder="you@example.com"
+                placeholder="name@example.com"
                 required
                 type="email"
                 value={email}
@@ -201,7 +202,7 @@ export default function AuthPage({ mode }: AuthPageProps) {
                 minLength={isSignUp ? 8 : undefined}
                 name="password"
                 onChange={(event) => setPassword(event.target.value)}
-                placeholder={isSignUp ? "At least 8 characters" : "Your password"}
+                placeholder={isSignUp ? "8+ characters" : "Password"}
                 required
                 type="password"
                 value={password}
@@ -220,11 +221,10 @@ export default function AuthPage({ mode }: AuthPageProps) {
             <span>{isSignUp ? "Already part of the night shift?" : "New to Morbius?"}</span>
             <Link href={isSignUp ? "/signin" : "/signup"}>{isSignUp ? "Sign in" : "Create an account"}</Link>
           </div>
-          <div className="auth-card-bottom"><span className="auth-secure-dot" /> YOUR ACCOUNT. YOUR WORK. YOURS.</div>
-        </section>
+        </LiquidGlass>
       </div>
 
-      <footer className="auth-footer"><span>© MORBIUS 2026</span><span>MAKE SOMETHING THAT FEELS LIKE YOU.</span><Link href="/">BACK TO THE SURFACE ↑</Link></footer>
+      <footer className="auth-footer"><span>© MORBIUS 2026</span><Link href="/">Home ↑</Link></footer>
     </main>
   );
 }

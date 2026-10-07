@@ -1,14 +1,17 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
+import { GeistMono } from "geist/font/mono";
+import { GeistSans } from "geist/font/sans";
 import "./globals.css";
 import "../styles.css";
 import "../brand.css";
 
 export const metadata: Metadata = {
-  title: "Morbius — Interfaces after dark",
-  description:
-    "A living library of interface components, full-page blocks, and tools to shape them your way.",
+  title: "Morbius — Make it yours",
+  description: "A visual library of components, blocks, and pages to make your own.",
 };
+
+const themeInitScript = `(()=>{try{const saved=localStorage.getItem("morbius-theme");const choice=saved==="light"||saved==="dark"?saved:"system";const dark=choice==="dark"||(choice==="system"&&matchMedia("(prefers-color-scheme: dark)").matches);document.documentElement.dataset.themeChoice=choice;document.documentElement.dataset.theme=dark?"dark":"light"}catch{}})()`;
 
 export default function RootLayout({
   children,
@@ -16,16 +19,11 @@ export default function RootLayout({
   children: ReactNode;
 }>) {
   return (
-    <html lang="en" data-wallpaper="blood-moon" data-scroll-behavior="smooth">
+    <html lang="en" className={`${GeistSans.variable} ${GeistMono.variable}`} data-theme="light" data-theme-choice="system" data-wallpaper="blood-moon" data-scroll-behavior="smooth" suppressHydrationWarning>
       <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
         <link
-          rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossOrigin="anonymous"
-        />
-        <link
-          href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&family=Nosifer&family=Unbounded:wght@500;600;700;800&family=UnifrakturMaguntia&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Nosifer&display=swap"
           rel="stylesheet"
         />
       </head>

@@ -3,6 +3,7 @@
 import Link from "next/link";
 import type { CSSProperties } from "react";
 import { useEffect, useMemo, useRef, useState } from "react";
+import ThemeControl from "@/app/ThemeControl";
 import { createClient as createSupabaseClient } from "@/lib/supabase/client";
 
 type CatalogItem = {
@@ -352,19 +353,22 @@ export default function LibraryPage() {
           <span className="library-breadcrumb">THE COLLECTION <i>/</i> COMPONENT LIBRARY</span>
           <Link href="/#studio">Studio <span aria-hidden="true">↗</span></Link>
         </nav>
-        <Link className="library-header-cta" href="/signup">Join the night shift <span aria-hidden="true">↗</span></Link>
+        <div className="library-header-actions">
+          <ThemeControl />
+          <Link className="library-header-cta" href="/signup">Sign up <span aria-hidden="true">↗</span></Link>
+        </div>
       </header>
 
       <section className="library-intro" aria-labelledby="library-title">
         <div className="library-intro-copy">
-          <p className="library-eyebrow"><span /> THE MORBIUS LIBRARY <i>/</i> MADE TO REMIX</p>
-          <h1 id="library-title">Find your <span>form.</span></h1>
-          <p className="library-lede">A growing collection of interface pieces. Find a starting point, preview it, and make the code yours.</p>
-          <p className={`library-source-status library-source-status--${catalogSource}`}><span />{catalogSource === "database" ? "Live catalog · Supabase" : "Starter collection · live catalog connects after database setup"}</p>
+          <p className="library-eyebrow"><span /> COMPONENTS · BLOCKS · PAGES</p>
+          <h1 id="library-title">Build from <span>here.</span></h1>
+          <p className="library-lede">Browse. Preview. Make it yours.</p>
+          <p className={`library-source-status library-source-status--${catalogSource}`}><span />{catalogSource === "database" ? "Live catalog" : "Preview catalog"}</p>
         </div>
         <div className="library-count-card" aria-live="polite">
           <span className="library-count-number">{items.length.toString().padStart(2, "0")}</span>
-          <span className="library-count-copy">pieces in this<br />first collection</span>
+          <span className="library-count-copy">pieces</span>
           <svg viewBox="0 0 140 72" aria-hidden="true"><path d="M70 32c-8-17-26-27-47-26 9 8 11 19 8 29C20 25 10 22 0 23c14 8 19 19 21 32 11-10 23-13 37-8 4 8 8 14 12 17 4-3 8-9 12-17 14-5 26-2 37 8 2-13 7-24 21-32-10-1-20 2-31 12-3-10-1-21 8-29-21-1-39 9-47 26Z" /></svg>
         </div>
       </section>
@@ -372,7 +376,7 @@ export default function LibraryPage() {
       <section className="library-tools" aria-label="Search and filter the component library">
         <label className="library-search">
           <span aria-hidden="true">⌕</span>
-          <input ref={searchInputRef} value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search components, blocks, styles..." aria-label="Search the library" />
+          <input ref={searchInputRef} value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search the library…" aria-label="Search the library" />
           <kbd>Ctrl / ⌘ K</kbd>
         </label>
         <div className="library-selects">
@@ -388,7 +392,7 @@ export default function LibraryPage() {
             <button key={filter} className={category === filter ? "is-active" : ""} type="button" role="tab" aria-selected={category === filter} onClick={() => setCategory(filter)}>{filter}<span>{filter === "Everything" ? catalogItems.length : catalogItems.filter((item) => `${item.category}s` === filter).length}</span></button>
           ))}
         </div>
-        <p className="library-results-count">Showing <strong>{items.length}</strong> of {catalogItems.length} pieces</p>
+        <p className="library-results-count"><strong>{items.length}</strong> results</p>
       </div>
 
       {items.length > 0 ? (
@@ -416,16 +420,15 @@ export default function LibraryPage() {
       ) : (
         <div className="library-empty-state">
           <span aria-hidden="true">✳</span>
-          <h2>No pieces in this orbit.</h2>
-          <p>Try another search or clear a filter to see more of the collection.</p>
-          <button type="button" onClick={clearFilters}>Clear all filters</button>
+          <h2>No matches</h2>
+          <button type="button" onClick={clearFilters}>Clear filters</button>
         </div>
       )}
 
       <footer className="library-footer">
         <Link className="library-brand" href="/" aria-label="Morbius home"><span className="library-brand-bat" aria-hidden="true">✦</span><span>MORBIUS<span>.</span></span></Link>
-        <p>Find a spark. Shape it your way. <i>Built after dark.</i></p>
-        <span className="library-footer-mark">M / 001 · OPEN COLLECTION</span>
+        <p>Make it yours.</p>
+        <span className="library-footer-mark">© MORBIUS 2026</span>
       </footer>
 
       {selected && (
@@ -433,7 +436,7 @@ export default function LibraryPage() {
           <section className="library-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
             <div className="library-modal-header"><div><p className="library-card-meta">{selected.category} <i>·</i> {selected.framework} <i>·</i> {selected.style}</p><h2 id="modal-title">{selected.title}</h2></div><button type="button" className="library-modal-close" onClick={() => setSelected(null)} aria-label="Close component preview">×</button></div>
             <div className="library-modal-preview"><PreviewArtwork item={selected} /></div>
-            <div className="library-code-heading"><div><span>COMPONENT SOURCE</span><small>Copy and adapt it for your project.</small></div><button className="library-copy-button" type="button" onClick={() => void copyCode(selected)}><span aria-hidden="true">&lt;/&gt;</span> Copy code</button></div>
+            <div className="library-code-heading"><div><span>COMPONENT SOURCE</span><small>Copy and customize.</small></div><button className="library-copy-button" type="button" onClick={() => void copyCode(selected)}><span aria-hidden="true">&lt;/&gt;</span> Copy code</button></div>
             <pre className="library-code"><code>{selected.code}</code></pre>
           </section>
         </div>
