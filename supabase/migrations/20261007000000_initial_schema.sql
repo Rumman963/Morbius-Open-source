@@ -14,7 +14,7 @@ create table public.profiles (
 
 create table public.components (
   id uuid primary key default gen_random_uuid(),
-  creator_id uuid not null references auth.users (id) on delete cascade,
+  creator_id uuid references auth.users (id) on delete set null,
   slug text not null check (char_length(slug) between 2 and 80),
   title text not null check (char_length(title) between 2 and 120),
   description text not null default '' check (char_length(description) <= 2000),
@@ -53,6 +53,114 @@ create table public.saved_components (
   component_id uuid not null references public.components (id) on delete cascade,
   saved_at timestamptz not null default now(),
   primary key (user_id, component_id)
+);
+
+-- Seed the public starter catalog. A null creator_id marks Morbius-curated entries;
+-- user-created components must always belong to an authenticated creator.
+insert into public.components (
+  creator_id, slug, title, description, category, framework, styling,
+  source_code, preview_config, status, access
+) values
+(
+  null, 'crimson-button', 'Crimson launch button',
+  'A glossy, high-contrast action button with a soft lift on hover.',
+  'component', 'React', 'Tailwind CSS',
+  $source$export function CrimsonButton() {
+  return (
+    <button className="rounded-xl bg-gradient-to-br from-rose-500 to-red-700 px-5 py-3 font-semibold text-white shadow-lg shadow-red-950/20 transition hover:-translate-y-0.5">
+      Launch project <span aria-hidden="true">↗</span>
+    </button>
+  );
+}$source$,
+  $json${"style":"Glass","visual":"button","accent":"#cf182b","previewTitle":"Make an entrance.","previewCopy":"One clear action. A little extra shine.","previewAction":"Launch project"}$json$::jsonb,
+  'published', 'free'
+),
+(
+  null, 'after-hours-auth', 'After-hours sign in',
+  'A calm, welcoming sign-in panel with room for your own auth flow.',
+  'block', 'Next.js', 'Tailwind CSS',
+  $source$export function SignInCard() {
+  return (
+    <form className="w-full max-w-sm rounded-3xl border border-white/70 bg-white/75 p-8 shadow-2xl shadow-rose-950/10 backdrop-blur-2xl">
+      <p className="text-xs font-semibold uppercase tracking-[0.2em] text-red-700">Welcome back</p>
+      <h2 className="mt-3 text-3xl font-semibold tracking-tight text-zinc-950">Enter the after hours.</h2>
+      <label className="mt-7 block text-sm text-zinc-700" htmlFor="email">Email</label>
+      <input className="mt-2 w-full rounded-xl border border-zinc-200 bg-white/80 px-4 py-3 outline-none focus:border-red-500" id="email" type="email" placeholder="you@example.com" />
+      <button className="mt-5 w-full rounded-xl bg-red-700 px-4 py-3 font-semibold text-white transition hover:bg-red-600" type="submit">Continue</button>
+    </form>
+  );
+}$source$,
+  $json${"style":"Glass","visual":"auth","accent":"#bf1429","previewTitle":"Welcome back.","previewCopy":"Your next idea is waiting after dark.","previewAction":"Continue with email"}$json$::jsonb,
+  'published', 'free'
+),
+(
+  null, 'soft-pricing', 'The soft launch pricing block',
+  'A transparent plan card for introducing a free tier and what comes next.',
+  'block', 'React', 'Tailwind CSS',
+  $source$export function PricingCard() {
+  return (
+    <article className="max-w-sm rounded-3xl border border-zinc-200 bg-white p-7 shadow-xl shadow-zinc-900/5">
+      <p className="text-sm font-medium text-red-700">Free forever</p>
+      <h2 className="mt-3 text-4xl font-semibold tracking-tight text-zinc-950">$0 / month</h2>
+      <p className="mt-3 text-sm leading-6 text-zinc-600">Everything you need to find your starting point.</p>
+      <button className="mt-7 w-full rounded-xl border border-zinc-300 px-4 py-3 font-semibold text-zinc-900">Explore the library</button>
+    </article>
+  );
+}$source$,
+  $json${"style":"Editorial","visual":"pricing","accent":"#c92b3e","previewTitle":"Start with the essentials.","previewCopy":"Free to explore. Room to grow.","previewAction":"Choose this plan"}$json$::jsonb,
+  'published', 'free'
+),
+(
+  null, 'midnight-stats', 'Midnight stats panel',
+  'A compact dashboard card for activity, progress, or a small set of metrics.',
+  'component', 'Next.js', 'Tailwind CSS',
+  $source$export function StatsCard() {
+  return (
+    <article className="rounded-2xl border border-zinc-200 bg-white/85 p-6 shadow-lg shadow-zinc-900/5 backdrop-blur-xl">
+      <p className="text-sm text-zinc-500">Projects shipped</p>
+      <div className="mt-3 flex items-end justify-between">
+        <strong className="text-4xl font-semibold tracking-tight text-zinc-950">24</strong>
+        <span className="rounded-full bg-rose-50 px-3 py-1 text-xs font-medium text-rose-700">+12.8%</span>
+      </div>
+      <div className="mt-6 h-2 overflow-hidden rounded-full bg-zinc-100"><div className="h-full w-3/4 rounded-full bg-gradient-to-r from-rose-400 to-red-700" /></div>
+    </article>
+  );
+}$source$,
+  $json${"style":"Minimal","visual":"stats","accent":"#a91d30","previewTitle":"Your little corner of night.","previewCopy":"A clean home for the numbers that matter.","previewAction":"+12.8% this month"}$json$::jsonb,
+  'published', 'free'
+),
+(
+  null, 'creature-hero', 'Creature feature hero',
+  'A bold landing-page opener with a strong headline and two paths forward.',
+  'page', 'React', 'Tailwind CSS',
+  $source$export function CreatureHero() {
+  return (
+    <section className="relative isolate overflow-hidden rounded-[2rem] bg-gradient-to-br from-white via-rose-50 to-zinc-100 px-8 py-20 text-center shadow-xl shadow-red-950/5 sm:px-16">
+      <p className="text-xs font-semibold uppercase tracking-[0.24em] text-red-700">A collection for builders</p>
+      <h1 className="mx-auto mt-5 max-w-3xl text-5xl font-semibold tracking-tight text-zinc-950 sm:text-7xl">Make it your creature.</h1>
+      <p className="mx-auto mt-6 max-w-xl text-lg leading-8 text-zinc-600">Find a starting point, shape it your way, and make something worth looking at.</p>
+      <a className="mt-9 inline-flex rounded-xl bg-red-700 px-6 py-3 font-semibold text-white shadow-lg" href="#collection">Explore the collection ↗</a>
+    </section>
+  );
+}$source$,
+  $json${"style":"Signal","visual":"hero","accent":"#d21c32","previewTitle":"Make something unmistakably yours.","previewCopy":"A hero section built to set the tone from the first scroll.","previewAction":"Explore the collection"}$json$::jsonb,
+  'published', 'free'
+),
+(
+  null, 'orbit-profile', 'Orbit profile card',
+  'A creator profile surface with a warm glass treatment and clear follow action.',
+  'component', 'React', 'Tailwind CSS',
+  $source$export function CreatorCard() {
+  return (
+    <article className="flex items-center gap-4 rounded-2xl border border-white/80 bg-white/70 p-5 shadow-xl shadow-zinc-900/5 backdrop-blur-2xl">
+      <div className="grid size-14 shrink-0 place-items-center rounded-full bg-gradient-to-br from-rose-200 to-red-600 text-lg font-semibold text-white">N</div>
+      <div className="min-w-0 flex-1"><h2 className="font-semibold text-zinc-950">Nia R.</h2><p className="mt-1 text-sm text-zinc-500">Independent maker · 8 pieces</p></div>
+      <button className="rounded-full border border-zinc-300 px-4 py-2 text-sm font-medium text-zinc-800" type="button">Follow</button>
+    </article>
+  );
+}$source$,
+  $json${"style":"Glass","visual":"profile","accent":"#c51b31","previewTitle":"Made by the many.","previewCopy":"A small profile card for the people behind the work.","previewAction":"View creator"}$json$::jsonb,
+  'published', 'free'
 );
 
 create index components_public_catalog_idx

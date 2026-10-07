@@ -37,7 +37,7 @@ export default function Home() {
         <button className="wallpaper-trigger" type="button" aria-label="Change background atmosphere" aria-haspopup="true" aria-expanded="false">
           <span className="wallpaper-dot"></span><span className="wallpaper-label">Blood moon</span><span className="chevron" aria-hidden="true">⌄</span>
         </button>
-        <a className="header-signin" href="#join">Sign in</a>
+        <a className="header-signin" href="/signin">Sign in</a>
         <a className="button button--small button--red" href="/library">Enter the library <span aria-hidden="true">↗</span></a>
       </div>
       <button className="menu-toggle" type="button" aria-label="Open navigation" aria-expanded="false"><span></span><span></span></button>

@@ -3,14 +3,15 @@
 import Link from "next/link";
 import type { CSSProperties } from "react";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { createClient as createSupabaseClient } from "@/lib/supabase/client";
 
 type CatalogItem = {
   id: string;
   title: string;
   description: string;
   category: "Component" | "Block" | "Page";
-  framework: "React" | "Next.js";
-  style: "Glass" | "Editorial" | "Minimal" | "Signal";
+  framework: string;
+  style: string;
   creator: string;
   accent: string;
   visual: string;
@@ -169,6 +170,22 @@ const catalog: CatalogItem[] = [
 const categories = ["Everything", "Components", "Blocks", "Pages"] as const;
 type CategoryFilter = (typeof categories)[number];
 
+type SupabaseCatalogRow = {
+  id: string;
+  title: string;
+  description: string;
+  category: string;
+  framework: string;
+  styling: string;
+  source_code: string;
+  preview_config: Record<string, unknown> | null;
+};
+
+function configText(config: Record<string, unknown> | null, key: string, fallback: string) {
+  const value = config?.[key];
+  return typeof value === "string" && value.length > 0 ? value : fallback;
+}
+
 function PreviewArtwork({ item }: { item: CatalogItem }) {
   return (
     <div className={`library-art library-art--${item.visual}`} style={{ "--art-accent": item.accent } as CSSProperties}>
@@ -183,7 +200,7 @@ function PreviewArtwork({ item }: { item: CatalogItem }) {
         <p>{item.previewCopy}</p>
         <span className="library-art-action">{item.previewAction} <b aria-hidden="true">↗</b></span>
       </div>
-      <span className="library-art-index" aria-hidden="true">M / 0{catalog.indexOf(item) + 1}</span>
+      <span className="library-art-index" aria-hidden="true">M / {item.category.toUpperCase()}</span>
     </div>
   );
 }
@@ -196,11 +213,74 @@ export default function LibraryPage() {
   const [sort, setSort] = useState("Featured");
   const [selected, setSelected] = useState<CatalogItem | null>(null);
   const [notice, setNotice] = useState("");
+  const [catalogItems, setCatalogItems] = useState<CatalogItem[]>(catalog);
+  const [catalogSource, setCatalogSource] = useState<"preview" | "database">("preview");
   const searchInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    let isActive = true;
+
+    if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY) {
+      return () => { isActive = false; };
+    }
+
+    async function loadCatalog() {
+      try {
+        const supabase = createSupabaseClient();
+        const { data, error } = await supabase
+          .from("components")
+          .select("id, title, description, category, framework, styling, source_code, preview_config")
+          .eq("status", "published")
+          .eq("access", "free")
+          .order("created_at", { ascending: false });
+
+        if (!isActive) return;
+
+        if (error || !data || data.length === 0) {
+          setCatalogSource("preview");
+          return;
+        }
+
+        const liveItems = (data as SupabaseCatalogRow[]).map((row) => {
+          const preview = row.preview_config;
+          const normalizedCategory = row.category.toLowerCase();
+          const itemCategory: CatalogItem["category"] = normalizedCategory === "block"
+            ? "Block"
+            : normalizedCategory === "page"
+              ? "Page"
+              : "Component";
+
+          return {
+            id: row.id,
+            title: row.title,
+            description: row.description,
+            category: itemCategory,
+            framework: row.framework,
+            style: configText(preview, "style", row.styling),
+            creator: "Morbius",
+            accent: configText(preview, "accent", "#cf182b"),
+            visual: configText(preview, "visual", "button"),
+            previewTitle: configText(preview, "previewTitle", row.title),
+            previewCopy: configText(preview, "previewCopy", row.description),
+            previewAction: configText(preview, "previewAction", "Explore component"),
+            code: row.source_code,
+          } satisfies CatalogItem;
+        });
+
+        setCatalogItems(liveItems);
+        setCatalogSource("database");
+      } catch {
+        if (isActive) setCatalogSource("preview");
+      }
+    }
+
+    void loadCatalog();
+    return () => { isActive = false; };
+  }, []);
 
   const items = useMemo(() => {
     const normalizedQuery = query.trim().toLowerCase();
-    const filtered = catalog.filter((item) => {
+    const filtered = catalogItems.filter((item) => {
       const categoryMatch = category === "Everything" || `${item.category}s` === category;
       const frameworkMatch = framework === "Any framework" || item.framework === framework;
       const styleMatch = style === "Any style" || item.style === style;
@@ -212,7 +292,10 @@ export default function LibraryPage() {
     if (sort === "A–Z") return filtered.sort((a, b) => a.title.localeCompare(b.title));
     if (sort === "Newest") return filtered.reverse();
     return filtered;
-  }, [category, framework, query, sort, style]);
+  }, [catalogItems, category, framework, query, sort, style]);
+
+  const availableFrameworks = Array.from(new Set(catalogItems.map((item) => item.framework))).sort();
+  const availableStyles = Array.from(new Set(catalogItems.map((item) => item.style))).sort();
 
   useEffect(() => {
     if (!selected) return;
@@ -269,7 +352,7 @@ export default function LibraryPage() {
           <span className="library-breadcrumb">THE COLLECTION <i>/</i> COMPONENT LIBRARY</span>
           <Link href="/#studio">Studio <span aria-hidden="true">↗</span></Link>
         </nav>
-        <Link className="library-header-cta" href="/#join">Join the night shift <span aria-hidden="true">↗</span></Link>
+        <Link className="library-header-cta" href="/signup">Join the night shift <span aria-hidden="true">↗</span></Link>
       </header>
 
       <section className="library-intro" aria-labelledby="library-title">
@@ -277,6 +360,7 @@ export default function LibraryPage() {
           <p className="library-eyebrow"><span /> THE MORBIUS LIBRARY <i>/</i> MADE TO REMIX</p>
           <h1 id="library-title">Find your <span>form.</span></h1>
           <p className="library-lede">A growing collection of interface pieces. Find a starting point, preview it, and make the code yours.</p>
+          <p className={`library-source-status library-source-status--${catalogSource}`}><span />{catalogSource === "database" ? "Live catalog · Supabase" : "Starter collection · live catalog connects after database setup"}</p>
         </div>
         <div className="library-count-card" aria-live="polite">
           <span className="library-count-number">{items.length.toString().padStart(2, "0")}</span>
@@ -292,8 +376,8 @@ export default function LibraryPage() {
           <kbd>Ctrl / ⌘ K</kbd>
         </label>
         <div className="library-selects">
-          <label className="library-select-wrap"><span className="sr-only">Filter by framework</span><select value={framework} onChange={(event) => setFramework(event.target.value)}><option>Any framework</option><option>React</option><option>Next.js</option></select><i aria-hidden="true">⌄</i></label>
-          <label className="library-select-wrap"><span className="sr-only">Filter by visual style</span><select value={style} onChange={(event) => setStyle(event.target.value)}><option>Any style</option><option>Glass</option><option>Editorial</option><option>Minimal</option><option>Signal</option></select><i aria-hidden="true">⌄</i></label>
+          <label className="library-select-wrap"><span className="sr-only">Filter by framework</span><select value={framework} onChange={(event) => setFramework(event.target.value)}><option>Any framework</option>{availableFrameworks.map((value) => <option key={value}>{value}</option>)}</select><i aria-hidden="true">⌄</i></label>
+          <label className="library-select-wrap"><span className="sr-only">Filter by visual style</span><select value={style} onChange={(event) => setStyle(event.target.value)}><option>Any style</option>{availableStyles.map((value) => <option key={value}>{value}</option>)}</select><i aria-hidden="true">⌄</i></label>
           <label className="library-select-wrap"><span className="sr-only">Sort results</span><select value={sort} onChange={(event) => setSort(event.target.value)}><option>Featured</option><option>A–Z</option><option>Newest</option></select><i aria-hidden="true">⌄</i></label>
         </div>
       </section>
@@ -301,10 +385,10 @@ export default function LibraryPage() {
       <div className="library-category-row">
         <div className="library-category-tabs" role="tablist" aria-label="Filter by content type">
           {categories.map((filter) => (
-            <button key={filter} className={category === filter ? "is-active" : ""} type="button" role="tab" aria-selected={category === filter} onClick={() => setCategory(filter)}>{filter}<span>{filter === "Everything" ? catalog.length : catalog.filter((item) => `${item.category}s` === filter).length}</span></button>
+            <button key={filter} className={category === filter ? "is-active" : ""} type="button" role="tab" aria-selected={category === filter} onClick={() => setCategory(filter)}>{filter}<span>{filter === "Everything" ? catalogItems.length : catalogItems.filter((item) => `${item.category}s` === filter).length}</span></button>
           ))}
         </div>
-        <p className="library-results-count">Showing <strong>{items.length}</strong> of {catalog.length} pieces</p>
+        <p className="library-results-count">Showing <strong>{items.length}</strong> of {catalogItems.length} pieces</p>
       </div>
 
       {items.length > 0 ? (
