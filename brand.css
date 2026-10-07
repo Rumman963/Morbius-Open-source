@@ -1,0 +1,22 @@
+.brand-name {
+  font-family: "UnifrakturMaguntia", "Times New Roman", serif;
+  font-size: 22px;
+  font-weight: 400;
+  letter-spacing: 0.025em;
+  text-shadow: 0 0 13px rgba(240, 68, 62, 0.13);
+}
+
+.brand-period {
+  font-family: "Unbounded", sans-serif;
+  font-size: 0.72em;
+}
+
+.footer-brand .brand-name {
+  font-size: 18px;
+}
+
+@media (max-width: 410px) {
+  .brand-name {
+    font-size: 19px;
+  }
+}
