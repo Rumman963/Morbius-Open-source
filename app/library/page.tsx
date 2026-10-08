@@ -3,7 +3,6 @@
 import Link from "next/link";
 import type { CSSProperties } from "react";
 import { useEffect, useMemo, useRef, useState } from "react";
-import ThemeControl from "@/app/ThemeControl";
 import { createClient as createSupabaseClient } from "@/lib/supabase/client";
 
 type CatalogItem = {
@@ -346,15 +345,13 @@ export default function LibraryPage() {
 
       <header className="library-header">
         <Link className="library-brand" href="/" aria-label="Morbius home">
-          <span className="library-brand-bat" aria-hidden="true">✦</span>
-          <span>MORBIUS<span>.</span></span>
+          <img className="library-brand-logo" src="/brand/morbius-logo.png" alt="Morbius" />
         </Link>
         <nav className="library-header-links" aria-label="Library navigation">
           <span className="library-breadcrumb">THE COLLECTION <i>/</i> COMPONENT LIBRARY</span>
           <Link href="/#studio">Studio <span aria-hidden="true">↗</span></Link>
         </nav>
         <div className="library-header-actions">
-          <ThemeControl />
           <Link className="library-header-cta" href="/signup">Sign up <span aria-hidden="true">↗</span></Link>
         </div>
       </header>
@@ -426,7 +423,6 @@ export default function LibraryPage() {
       )}
 
       <footer className="library-footer">
-        <Link className="library-brand" href="/" aria-label="Morbius home"><span className="library-brand-bat" aria-hidden="true">✦</span><span>MORBIUS<span>.</span></span></Link>
         <p>Make it yours.</p>
         <span className="library-footer-mark">© MORBIUS 2026</span>
       </footer>

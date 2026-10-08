@@ -1,7 +1,6 @@
 import Script from "next/script";
 import type { CSSProperties } from "react";
 import { LiquidGlass } from "@creativoma/liquid-glass";
-import ThemeControl from "./ThemeControl";
 import ScrollBats from "./ScrollBats";
 
 export default function Home() {
@@ -17,10 +16,7 @@ export default function Home() {
 
     <header className="site-header">
       <a className="brand" href="#top" aria-label="Morbius home">
-        <span className="brand-mark" aria-hidden="true">
-          <svg viewBox="0 0 54 34"><path d="M27 13C22 3 12 1 3 2c4 4 5 9 4 14-4-4-7-5-7-5 5 7 8 12 8 19 5-5 10-7 16-4 1 3 2 5 3 6 1-1 2-3 3-6 6-3 11-1 16 4 0-7 3-12 8-19 0 0-3 1-7 5-1-5 0-10 4-14-9-1-19 1-24 11Z" /></svg>
-        </span>
-        <span className="brand-name">MORBIUS<span className="brand-period">.</span></span>
+        <img className="brand-logo" src="/brand/morbius-logo.png" alt="Morbius" />
       </a>
       <nav className="main-nav" aria-label="Main navigation">
         <a href="/library">Collection</a>
@@ -29,7 +25,6 @@ export default function Home() {
         <a href="#plans">Plans</a>
       </nav>
       <div className="header-actions">
-        <ThemeControl />
         <button className="wallpaper-trigger" type="button" aria-label="Change background atmosphere" aria-haspopup="true" aria-expanded="false">
           <span className="wallpaper-dot"></span><span className="wallpaper-label">Blood moon</span><span className="chevron" aria-hidden="true">⌄</span>
         </button>
@@ -149,7 +144,7 @@ export default function Home() {
       <section className="final-cta section-shell" id="join" data-reveal><div className="final-eyes" aria-hidden="true"><span></span><span></span></div><div className="eyebrow"><span className="eyebrow-line"></span> YOUR NEXT BUILD</div><h2>Make it<br /><span className="title-red">yours.</span></h2><a className="button button--red" href="/signup">Get started <span aria-hidden="true">↗</span></a></section>
     </main>
 
-    <footer className="site-footer"><a className="brand footer-brand" href="#top"><span className="brand-mark" aria-hidden="true"><svg viewBox="0 0 54 34"><path d="M27 13C22 3 12 1 3 2c4 4 5 9 4 14-4-4-7-5-7-5 5 7 8 12 8 19 5-5 10-7 16-4 1 3 2 5 3 6 1-1 2-3 3-6 6-3 11-1 16 4 0-7 3-12 8-19 0 0-3 1-7 5-1-5 0-10 4-14-9-1-19 1-24 11Z" /></svg></span><span className="brand-name">MORBIUS<span className="brand-period">.</span></span></a><div className="footer-links"><a href="/library">Library</a><a href="#studio">Studio</a><a href="#plans">Plans</a></div><span className="footer-mark">© MORBIUS 2026</span></footer>
+    <footer className="site-footer"><div className="footer-links"><a href="/library">Library</a><a href="#studio">Studio</a><a href="#plans">Plans</a></div><span className="footer-mark">© MORBIUS 2026</span></footer>
     <div className="toast" role="status" aria-live="polite"></div>
       <Script src="/script.js" strategy="afterInteractive" />
     </>

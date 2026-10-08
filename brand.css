@@ -2201,6 +2201,34 @@ body { line-height: 1.55; }
 .brand-name { font-size: 18px; }
 .library-brand { font-size: 16px; }
 
+/* The supplied brand artwork is the only logo lockup used on the site. */
+.brand-logo,
+.library-brand-logo,
+.auth-brand-logo {
+  display: block;
+  width: auto;
+  height: 34px;
+  object-fit: contain;
+}
+
+.brand-logo { height: 38px; }
+.library-brand-logo { height: 31px; }
+.auth-brand-logo { height: 36px; }
+
+html[data-theme="dark"] .brand-logo,
+html[data-theme="dark"] .library-brand-logo,
+html[data-theme="dark"] .auth-brand-logo {
+  padding: 4px 7px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, .96);
+}
+
+@media (max-width: 420px) {
+  .brand-logo { height: 31px; }
+  .library-brand-logo,
+  .auth-brand-logo { height: 29px; }
+}
+
 .theme-control {
   display: inline-flex;
   flex: 0 0 auto;
@@ -2520,6 +2548,50 @@ html[data-theme="dark"] .auth-field input::placeholder { color: #8f858d; }
 html[data-theme="dark"] .auth-divider { color: #b4a9b0; }
 html[data-theme="dark"] .auth-divider::before,
 html[data-theme="dark"] .auth-divider::after { background: rgba(255,255,255,.14); }
+
+/* User palette: icy glossy surface, crimson bats, and a restrained eye-gold highlight. */
+:root {
+  --morbius-ice: #dce7e9;
+  --morbius-bat: #972424;
+  --morbius-gold: #c48a18;
+  --red: #972424;
+  --red-deep: #6e191d;
+}
+
+html,
+body {
+  background-color: var(--morbius-ice);
+  color: #211a1c;
+}
+
+body {
+  background-image: linear-gradient(135deg, #eef5f5 0%, var(--morbius-ice) 54%, #f8fbfb 100%);
+}
+
+.site-atmosphere {
+  background:
+    radial-gradient(ellipse at 78% 10%, rgba(255, 255, 255, .92), transparent 38%),
+    radial-gradient(ellipse at 12% 45%, rgba(255, 255, 255, .74), transparent 43%),
+    linear-gradient(135deg, #edf5f5 0%, var(--morbius-ice) 56%, #f9fbfb 100%);
+}
+
+.bat-flock,
+html[data-wallpaper="night-flight"] .bat-flock,
+html[data-wallpaper="eclipse"] .bat-flock {
+  color: var(--morbius-bat);
+}
+
+.auth-wallpaper {
+  background: linear-gradient(135deg, #eef5f5 0%, var(--morbius-ice) 58%, #f9fbfb 100%);
+}
+
+.auth-bat { color: var(--morbius-bat); }
+
+html[data-theme="dark"] body,
+html[data-theme="dark"] {
+  background-color: var(--morbius-ice);
+  color: #211a1c;
+}
 html[data-theme="dark"] .auth-card-orb { opacity: .72; }
 
 @media (max-width: 780px) {

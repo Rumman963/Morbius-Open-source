@@ -4,7 +4,6 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
 import { LiquidGlass } from "@creativoma/liquid-glass";
-import ThemeControl from "@/app/ThemeControl";
 import { createClient } from "@/lib/supabase/client";
 import { signInSchema, signUpSchema } from "@/lib/validation/auth";
 
@@ -20,16 +19,6 @@ function Bat({ className }: { className: string }) {
         <path d={batPath} />
       </svg>
     </span>
-  );
-}
-
-function MorbiusMark() {
-  return (
-    <svg viewBox="0 0 64 42" aria-hidden="true" focusable="false">
-      <path d="M32 16C25 4 14 2 3 3c5 5 6 11 4 17-5-5-8-6-8-6 6 8 9 14 9 23 6-6 12-8 19-5 2 4 3 6 5 8 2-2 3-4 5-8 7-3 13-1 19 5 0-9 3-15 9-23 0 0-3 1-8 6-2-6-1-12 4-17-11-1-22 1-29 13Z" />
-      <circle cx="22" cy="23" r="1.7" />
-      <circle cx="42" cy="23" r="1.7" />
-    </svg>
   );
 }
 
@@ -133,12 +122,8 @@ export default function AuthPage({ mode }: AuthPageProps) {
       </div>
 
       <header className="auth-topbar">
-        <Link className="auth-brand" href="/" aria-label="Morbius home">
-          <span className="auth-brand-mark"><MorbiusMark /></span>
-          <span className="auth-brand-word">MORBIUS</span>
-        </Link>
+        <Link className="auth-brand" href="/" aria-label="Morbius home"><img className="auth-brand-logo" src="/brand/morbius-logo.png" alt="Morbius" /></Link>
         <div className="auth-topbar-actions">
-          <ThemeControl />
           <Link className="auth-back-link" href="/library">Library <span aria-hidden="true">↗</span></Link>
         </div>
       </header>
