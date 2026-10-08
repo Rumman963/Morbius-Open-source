@@ -20,7 +20,7 @@ export default function Home() {
       </a>
       <nav className="main-nav" aria-label="Main navigation">
         <a href="/library">Collection</a>
-        <a href="#studio">Studio</a>
+        <a href="/studio">Studio</a>
         <a href="#community">Community</a>
         <a href="#plans">Plans</a>
       </nav>
@@ -48,7 +48,7 @@ export default function Home() {
           <p className="hero-lede">Components, blocks, and pages—ready to remix.</p>
           <div className="hero-actions">
             <a className="button button--red" href="/library">Explore library <span aria-hidden="true">↗</span></a>
-            <a className="button button--ghost" href="#studio">Open studio</a>
+          <a className="button button--ghost" href="/studio">Open studio</a>
           </div>
         </div>
 
@@ -108,7 +108,7 @@ export default function Home() {
       </section>
 
       <section className="studio section-shell" id="studio" aria-labelledby="studio-title">
-        <div className="studio-copy" data-reveal><div className="eyebrow"><span className="eyebrow-line"></span> THE STUDIO</div><h2 id="studio-title">Make it<br /><span className="title-red">morph.</span></h2><p>Shape it. See it. Copy the code.</p><ul className="studio-features"><li><span>01</span> Choose a style</li><li><span>02</span> Set color and motion</li><li><span>03</span> Copy your code</li></ul><a className="button button--ghost" href="#join">Create a component <span aria-hidden="true">↗</span></a></div>
+        <div className="studio-copy" data-reveal><div className="eyebrow"><span className="eyebrow-line"></span> THE STUDIO</div><h2 id="studio-title">Make it<br /><span className="title-red">morph.</span></h2><p>Shape it. See it. Copy the code.</p><ul className="studio-features"><li><span>01</span> Choose a style</li><li><span>02</span> Set color and motion</li><li><span>03</span> Copy your code</li></ul><a className="button button--ghost" href="/studio">Create a component <span aria-hidden="true">↗</span></a></div>
         <div className="studio-panel" data-reveal data-delay="120">
           <div className="studio-panel-head"><div className="studio-breadcrumb"><span className="studio-symbol">◈</span> STUDIO <span>/</span> CUSTOMIZE</div><div className="studio-state"><span className="live-indicator"></span> UNSAVED PREVIEW</div></div>
           <div className="studio-workspace">

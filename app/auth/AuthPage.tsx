@@ -61,7 +61,7 @@ export default function AuthPage({ mode }: AuthPageProps) {
 
         if (error) throw error;
         if (data.session) {
-          router.replace("/library");
+          router.replace("/");
           router.refresh();
           return;
         }
@@ -72,7 +72,7 @@ export default function AuthPage({ mode }: AuthPageProps) {
       } else {
         const { error } = await supabase.auth.signInWithPassword({ email: email.trim(), password });
         if (error) throw error;
-        router.replace("/library");
+        router.replace("/");
         router.refresh();
         return;
       }
@@ -123,9 +123,6 @@ export default function AuthPage({ mode }: AuthPageProps) {
 
       <header className="auth-topbar">
         <Link className="auth-brand" href="/" aria-label="Morbius home"><span className="brand-bat-symbol" aria-hidden="true"><svg viewBox="0 0 180 92"><path d="M90 41C78 16 53 3 22 5c13 12 16 28 11 43C18 33 8 29 0 29c20 12 28 27 30 48 16-15 33-19 54-12 2 12 4 19 6 22 2-3 4-10 6-22 21-7 38-3 54 12 2-21 10-36 30-48-8 0-18 4-33 19-5-15-2-31 11-43-31-2-56 11-68 36Z" /></svg></span><span className="brand-script">Morbius</span></Link>
-        <div className="auth-topbar-actions">
-          <Link className="auth-back-link" href="/library">Library <span aria-hidden="true">↗</span></Link>
-        </div>
       </header>
 
       <div className="auth-layout">

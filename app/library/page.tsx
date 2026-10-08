@@ -438,7 +438,7 @@ export default function LibraryPage() {
         </Link>
         <nav className="library-header-links" aria-label="Library navigation">
           <span className="library-breadcrumb">THE COLLECTION <i>/</i> COMPONENT LIBRARY</span>
-          <Link href="/#studio">Studio <span aria-hidden="true">↗</span></Link>
+          <Link href="/studio">Studio <span aria-hidden="true">↗</span></Link>
         </nav>
         <div className="library-header-actions">
           <Link className="library-header-cta" href="/signup">Sign up <span aria-hidden="true">↗</span></Link>
