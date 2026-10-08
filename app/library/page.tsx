@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import type { CSSProperties } from "react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { createClient as createSupabaseClient } from "@/lib/supabase/client";
@@ -167,7 +168,7 @@ const catalog: CatalogItem[] = [
   },
 ];
 
-const categories = ["Everything", "Components", "Blocks", "Pages"] as const;
+const categories = ["Everything", "Components", "Blocks", "Pages", "Saved"] as const;
 type CategoryFilter = (typeof categories)[number];
 
 type SupabaseCatalogRow = {
@@ -206,6 +207,7 @@ function PreviewArtwork({ item }: { item: CatalogItem }) {
 }
 
 export default function LibraryPage() {
+  const router = useRouter();
   const [category, setCategory] = useState<CategoryFilter>("Everything");
   const [query, setQuery] = useState("");
   const [framework, setFramework] = useState("Any framework");
@@ -215,7 +217,51 @@ export default function LibraryPage() {
   const [notice, setNotice] = useState("");
   const [catalogItems, setCatalogItems] = useState<CatalogItem[]>(catalog);
   const [catalogSource, setCatalogSource] = useState<"preview" | "database">("preview");
+  const [userId, setUserId] = useState<string | null>(null);
+  const [authReady, setAuthReady] = useState(false);
+  const [savedIds, setSavedIds] = useState<Set<string>>(() => new Set());
+  const [savingId, setSavingId] = useState<string | null>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    let isActive = true;
+
+    if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY) {
+      setAuthReady(true);
+      return () => { isActive = false; };
+    }
+
+    async function loadSavedComponents() {
+      try {
+        const supabase = createSupabaseClient();
+        const { data: { user }, error: userError } = await supabase.auth.getUser();
+        if (userError) throw userError;
+        if (!isActive) return;
+
+        setUserId(user?.id ?? null);
+        setAuthReady(true);
+        if (!user) {
+          setSavedIds(new Set());
+          return;
+        }
+
+        const { data, error } = await supabase
+          .from("saved_components")
+          .select("component_id")
+          .eq("user_id", user.id);
+        if (error) throw error;
+        if (isActive) setSavedIds(new Set(data.map((row) => row.component_id)));
+      } catch {
+        if (isActive) {
+          setAuthReady(true);
+          setNotice("Saved components could not be loaded.");
+        }
+      }
+    }
+
+    void loadSavedComponents();
+    return () => { isActive = false; };
+  }, []);
 
   useEffect(() => {
     let isActive = true;
@@ -281,7 +327,8 @@ export default function LibraryPage() {
   const items = useMemo(() => {
     const normalizedQuery = query.trim().toLowerCase();
     const filtered = catalogItems.filter((item) => {
-      const categoryMatch = category === "Everything" || `${item.category}s` === category;
+      const categoryMatch = category === "Everything"
+        || (category === "Saved" ? savedIds.has(item.id) : `${item.category}s` === category);
       const frameworkMatch = framework === "Any framework" || item.framework === framework;
       const styleMatch = style === "Any style" || item.style === style;
       const searchMatch = !normalizedQuery || [item.title, item.description, item.category, item.framework, item.style, item.creator]
@@ -292,10 +339,11 @@ export default function LibraryPage() {
     if (sort === "A–Z") return filtered.sort((a, b) => a.title.localeCompare(b.title));
     if (sort === "Newest") return filtered.reverse();
     return filtered;
-  }, [catalogItems, category, framework, query, sort, style]);
+  }, [catalogItems, category, framework, query, savedIds, sort, style]);
 
   const availableFrameworks = Array.from(new Set(catalogItems.map((item) => item.framework))).sort();
   const availableStyles = Array.from(new Set(catalogItems.map((item) => item.style))).sort();
+  const savedCount = catalogItems.filter((item) => savedIds.has(item.id)).length;
 
   useEffect(() => {
     if (!selected) return;
@@ -325,6 +373,47 @@ export default function LibraryPage() {
       setNotice("Clipboard access is unavailable in this browser.");
     }
     window.setTimeout(() => setNotice(""), 2400);
+  }
+
+  async function toggleSaved(item: CatalogItem) {
+    if (!authReady) return;
+    if (!userId) {
+      router.push("/signin");
+      return;
+    }
+    if (catalogSource !== "database") {
+      setNotice("Connect the live catalog to save components.");
+      window.setTimeout(() => setNotice(""), 2400);
+      return;
+    }
+    if (savingId) return;
+
+    setSavingId(item.id);
+    const wasSaved = savedIds.has(item.id);
+
+    try {
+      const supabase = createSupabaseClient();
+      const result = wasSaved
+        ? await supabase.from("saved_components").delete().eq("user_id", userId).eq("component_id", item.id)
+        : await supabase.from("saved_components").upsert(
+            { user_id: userId, component_id: item.id },
+            { onConflict: "user_id,component_id", ignoreDuplicates: true },
+          );
+      if (result.error) throw result.error;
+
+      setSavedIds((current) => {
+        const next = new Set(current);
+        if (wasSaved) next.delete(item.id);
+        else next.add(item.id);
+        return next;
+      });
+      setNotice(wasSaved ? "Removed from saved." : "Saved to your library.");
+    } catch {
+      setNotice("Could not update saved components. Try again.");
+    } finally {
+      setSavingId(null);
+      window.setTimeout(() => setNotice(""), 2400);
+    }
   }
 
   function clearFilters() {
@@ -385,9 +474,18 @@ export default function LibraryPage() {
 
       <div className="library-category-row">
         <div className="library-category-tabs" role="tablist" aria-label="Filter by content type">
-          {categories.map((filter) => (
-            <button key={filter} className={category === filter ? "is-active" : ""} type="button" role="tab" aria-selected={category === filter} onClick={() => setCategory(filter)}>{filter}<span>{filter === "Everything" ? catalogItems.length : catalogItems.filter((item) => `${item.category}s` === filter).length}</span></button>
-          ))}
+          {categories.map((filter) => {
+            const count = filter === "Everything"
+              ? catalogItems.length
+              : filter === "Saved"
+                ? savedCount
+                : catalogItems.filter((item) => `${item.category}s` === filter).length;
+            return (
+              <button key={filter} className={category === filter ? "is-active" : ""} type="button" role="tab" aria-selected={category === filter} onClick={() => setCategory(filter)}>
+                {filter}<span>{count.toString().padStart(2, "0")}</span>
+              </button>
+            );
+          })}
         </div>
         <p className="library-results-count"><strong>{items.length}</strong> results</p>
       </div>
@@ -406,6 +504,9 @@ export default function LibraryPage() {
                 <div className="library-card-bottom">
                   <span className="library-creator"><i>{item.creator.slice(0, 1)}</i> by {item.creator}</span>
                   <div className="library-card-actions">
+                    <button className={`library-save-button${savedIds.has(item.id) ? " is-saved" : ""}`} type="button" aria-label={savedIds.has(item.id) ? `Remove ${item.title} from saved components` : `Save ${item.title}`} aria-pressed={savedIds.has(item.id)} disabled={savingId !== null} onClick={() => void toggleSaved(item)}>
+                      <span aria-hidden="true">{savedIds.has(item.id) ? "♥" : "♡"}</span>
+                    </button>
                     <button className="library-preview-button" type="button" onClick={() => setSelected(item)}>Preview</button>
                     <button className="library-copy-button" type="button" onClick={() => void copyCode(item)}><span aria-hidden="true">&lt;/&gt;</span> Copy code</button>
                   </div>
@@ -417,8 +518,10 @@ export default function LibraryPage() {
       ) : (
         <div className="library-empty-state">
           <span aria-hidden="true">✳</span>
-          <h2>No matches</h2>
-          <button type="button" onClick={clearFilters}>Clear filters</button>
+          <h2>{category === "Saved" ? (userId ? "Nothing saved yet." : "Sign in to see saved pieces.") : "No matches"}</h2>
+          {category === "Saved" && !userId
+            ? <Link href="/signin">Sign in <span aria-hidden="true">↗</span></Link>
+            : <button type="button" onClick={category === "Saved" ? () => setCategory("Everything") : clearFilters}>{category === "Saved" ? "Browse components" : "Clear filters"}</button>}
         </div>
       )}
 
@@ -430,7 +533,15 @@ export default function LibraryPage() {
       {selected && (
         <div className="library-modal-backdrop" onMouseDown={(event) => { if (event.target === event.currentTarget) setSelected(null); }}>
           <section className="library-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
-            <div className="library-modal-header"><div><p className="library-card-meta">{selected.category} <i>·</i> {selected.framework} <i>·</i> {selected.style}</p><h2 id="modal-title">{selected.title}</h2></div><button type="button" className="library-modal-close" onClick={() => setSelected(null)} aria-label="Close component preview">×</button></div>
+            <div className="library-modal-header">
+              <div><p className="library-card-meta">{selected.category} <i>·</i> {selected.framework} <i>·</i> {selected.style}</p><h2 id="modal-title">{selected.title}</h2></div>
+              <div className="library-modal-actions">
+                <button className={`library-save-button${savedIds.has(selected.id) ? " is-saved" : ""}`} type="button" aria-label={savedIds.has(selected.id) ? `Remove ${selected.title} from saved components` : `Save ${selected.title}`} aria-pressed={savedIds.has(selected.id)} disabled={savingId !== null} onClick={() => void toggleSaved(selected)}>
+                  <span aria-hidden="true">{savedIds.has(selected.id) ? "♥" : "♡"}</span><span>{savedIds.has(selected.id) ? "Saved" : "Save"}</span>
+                </button>
+                <button type="button" className="library-modal-close" onClick={() => setSelected(null)} aria-label="Close component preview">×</button>
+              </div>
+            </div>
             <div className="library-modal-preview"><PreviewArtwork item={selected} /></div>
             <div className="library-code-heading"><div><span>COMPONENT SOURCE</span><small>Copy and customize.</small></div><button className="library-copy-button" type="button" onClick={() => void copyCode(selected)}><span aria-hidden="true">&lt;/&gt;</span> Copy code</button></div>
             <pre className="library-code"><code>{selected.code}</code></pre>

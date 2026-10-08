@@ -2892,6 +2892,30 @@ body { font-size: 14px; letter-spacing: .002em; }
 @media (prefers-reduced-motion: reduce) {
   .bat-crossing { display: none; }
 }
+
+.library-save-button {
+  display: inline-flex;
+  min-width: 32px;
+  min-height: 29px;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 0 8px;
+  border: 1px solid rgba(44, 63, 67, .16);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, .66);
+  color: #526064;
+  font: 500 15px/1 var(--sans);
+  cursor: pointer;
+  transition: color .2s ease, background .2s ease, border-color .2s ease, transform .2s ease;
+}
+
+.library-save-button:hover:not(:disabled) { transform: translateY(-1px); border-color: rgba(151, 36, 36, .32); color: var(--morbius-bat); }
+.library-save-button.is-saved { border-color: rgba(151, 36, 36, .24); background: rgba(151, 36, 36, .08); color: var(--morbius-bat); }
+.library-save-button:disabled { cursor: wait; opacity: .62; }
+.library-modal-actions { display: flex; align-items: center; gap: 9px; }
+.library-modal-actions .library-save-button span:last-child { font-size: 11px; }
+.library-empty-state > a { display: inline-flex; align-items: center; gap: 8px; }
 html[data-theme="dark"] .auth-card-orb { opacity: .72; }
 
 @media (max-width: 780px) {
