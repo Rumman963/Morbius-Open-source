@@ -106,6 +106,24 @@ body {
   filter: drop-shadow(0 6px 15px rgba(207, 24, 43, 0.22));
 }
 
+.bat-crossing {
+  position: absolute;
+  z-index: 1;
+  left: 0;
+  color: var(--morbius-bat, #972424);
+  pointer-events: none;
+  filter: drop-shadow(0 5px 12px rgba(151, 36, 36, .16));
+  transform-origin: center;
+  will-change: transform, opacity;
+}
+
+.bat-crossing svg { display: block; width: 100%; height: auto; fill: currentColor; }
+
+/* Keep the atmospheric layer visible between the page canvas and content. */
+.site-atmosphere { z-index: 0; }
+main#top,
+.site-footer { position: relative; z-index: 1; }
+
 .bat-flock--two,
 .bat-flock--three {
   opacity: 0.28;
@@ -2853,6 +2871,27 @@ body { font-size: 14px; letter-spacing: .002em; }
 .library-art-kicker { color: #526064; }
 .auth-google-button { color: var(--morbius-ink); }
 .toast { border-color: rgba(255, 255, 255, .84); background: rgba(248, 252, 252, .94); color: var(--morbius-ink); box-shadow: 0 14px 38px rgba(49, 70, 75, .16); backdrop-filter: blur(18px); }
+
+/* Keep the library nav full-bleed while its contents line up with the page grid. */
+.library-header {
+  width: 100%;
+  max-width: none;
+  margin-inline: 0;
+  padding-inline: max(32px, calc((100% - 1240px) / 2));
+  background: rgba(248, 252, 252, .72);
+}
+
+@media (max-width: 640px) {
+  .library-header { padding-inline: 18px; }
+}
+
+@media (max-width: 760px) {
+  .bat-crossing { filter: drop-shadow(0 3px 8px rgba(151, 36, 36, .13)); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bat-crossing { display: none; }
+}
 html[data-theme="dark"] .auth-card-orb { opacity: .72; }
 
 @media (max-width: 780px) {
