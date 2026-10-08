@@ -16,7 +16,7 @@ export default function Home() {
 
     <header className="site-header">
       <a className="brand" href="#top" aria-label="Morbius home">
-        <img className="brand-logo" src="/brand/morbius-logo.png" alt="Morbius" />
+        <span className="brand-bat-symbol" aria-hidden="true"><svg viewBox="0 0 180 92"><path d="M90 41C78 16 53 3 22 5c13 12 16 28 11 43C18 33 8 29 0 29c20 12 28 27 30 48 16-15 33-19 54-12 2 12 4 19 6 22 2-3 4-10 6-22 21-7 38-3 54 12 2-21 10-36 30-48-8 0-18 4-33 19-5-15-2-31 11-43-31-2-56 11-68 36Z" /></svg></span><span className="brand-script">Morbius</span>
       </a>
       <nav className="main-nav" aria-label="Main navigation">
         <a href="/library">Collection</a>

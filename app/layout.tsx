@@ -23,7 +23,7 @@ export default function RootLayout({
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
         <link
-          href="https://fonts.googleapis.com/css2?family=Nosifer&display=swap"
+          href="https://api.fontshare.com/v2/css?f[]=britney@400&f[]=nosifer@400&display=swap"
           rel="stylesheet"
         />
       </head>

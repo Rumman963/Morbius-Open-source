@@ -6,6 +6,27 @@
   text-shadow: 0 0 13px rgba(240, 68, 62, 0.13);
 }
 
+.brand-bat-symbol {
+  display: inline-grid;
+  width: 34px;
+  height: 25px;
+  place-items: center;
+  color: var(--morbius-bat, #972424);
+  flex: 0 0 auto;
+}
+
+.brand-bat-symbol svg { width: 100%; height: 100%; fill: currentColor; filter: drop-shadow(0 3px 8px rgba(151, 36, 36, .22)); }
+
+.brand-script {
+  color: #211a1c;
+  font-family: "Britney", "Brush Script MT", cursive;
+  font-size: 29px;
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -.045em;
+  line-height: .8;
+}
+
 .brand-period {
   font-family: "Unbounded", sans-serif;
   font-size: 0.72em;
