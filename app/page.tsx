@@ -120,7 +120,7 @@ export default function Home() {
               <div className="control-group"><div className="label-row"><label htmlFor="motion-toggle">Motion preview</label><button className="toggle-switch is-on" id="motion-toggle" type="button" role="switch" aria-checked="true" aria-label="Toggle motion preview"><i></i></button></div></div>
               <div className="studio-controls-footer"><span><i className="tiny-check">✓</i> Accessible by default</span><span><i className="tiny-check">✓</i> Responsive-ready</span></div>
             </aside>
-            <div className="studio-preview" data-style-preview="nocturne" style={{ "--preview-accent": "#f0443e", "--preview-radius": "12px" } as CSSProperties}>
+            <div className="studio-preview" data-style-preview="nocturne" style={{ "--preview-accent": "#972424", "--preview-radius": "12px" } as CSSProperties}>
               <div className="preview-toolbar"><span><i></i><i></i><i></i></span><small>DESKTOP PREVIEW</small><button type="button" aria-label="Preview on mobile">▯</button></div>
               <div className="preview-canvas"><div className="preview-card"><span className="canvas-kicker">YOUR COMPONENT, YOUR RULES</span><h3>Make something<br /><em>worth looking at.</em></h3><p>Small details. Big presence.</p><button className="canvas-button">Get started <span>↗</span></button><div className="canvas-credit"><span className="tiny-bat">✦</span> morbius / button-v1</div></div></div>
               <div className="preview-bottom"><span><i className="tiny-check">✓</i> Changes are yours to keep</span><button className="copy-code" type="button"><span>&lt;/&gt;</span> Copy code</button></div>
